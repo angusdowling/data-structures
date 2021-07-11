@@ -53,8 +53,7 @@ class LinkedList:
         current_node = current_node.get_next_node()
 
     def add_node_to_head(self, new_value):
-      new_node = Node(new_value)
-      new_node.set_next_node(self.head_node)
+      new_node = Node(new_value, self.get_head_node())
       self.head_node = new_node
 
     def add_node_to_tail(self, new_value):

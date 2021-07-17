@@ -1,187 +1,202 @@
-# This is an implementation of a mono-directional Linked List
+import sys
 
+# Represents a node in the linked list.
 class Node:
-  def __init__(self, value, next_node = None):
-    self.value = value
-    self.next_node = next_node
+  # The data held by the node.
+  __value = None
 
-  def get_value(self):
-    return self.value
+  # The next node in the linked list.
+  __nextNode = None
 
-  def get_next_node(self):
-    return self.next_node
+  # Creates a linked list node.
+  def __init__(self, value, nextNode = None):
+    self.__value = value
+    self.__nextNode = nextNode
 
-  def set_next_node(self, next_node):
-    self.next_node = next_node
+  # Get the node value.
+  def getValue(self):
+    return self.__value
 
+  # Get the next node.
+  def getNextNode(self):
+    return self.__nextNode
+
+  # Set the next node.
+  def setNextNode(self, nextNode):
+    self.__nextNode = nextNode
+
+# Represents a linked list.
 class LinkedList:
-    def __init__(self, value):
-      head_node = Node(value)
-      self.head_node = head_node
+  # The first node in the linked list.
+  __headNode = None
+  
+  # Creates a linked list.
+  def __init__(self, node):
+    self.__headNode = node
 
-    def get_head_node(self):
-      return self.head_node
+  # Find a node by testing function.
+  # 
+  # The find() method returns the first node in the 
+  # linked list that satisfies the provided testing function.
+  # 
+  # If no nodes satisfy the testing function, undefined is returned.
+  def __find(self, test):
+    currentNode = self.getHeadNode()
+    currentIndex = 0
 
-    def get_tail_node(self):
-      current_node = self.get_head_node()
-
-      while current_node:
-        if current_node.get_next_node() == None:
-          return current_node
-
-        current_node = current_node.get_next_node()
-
-    def get_node_by_value(self, value):
-      current_node = self.get_head_node()
-
-      while current_node:
-        if current_node.get_value() is value:
-          return current_node
-        
-        current_node = current_node.get_next_node()
-
-    def get_node_by_index(self, index):
-      current_node = self.get_head_node()
-      current_index = 0
-
-      while current_node:
-        if current_node is not None:
-          if current_index is index:
-            return current_node
-
-        current_index = current_index + 1
-        current_node = current_node.get_next_node()
-
-    def add_node_to_head(self, new_value):
-      new_node = Node(new_value, self.get_head_node())
-      self.head_node = new_node
-
-    def add_node_to_tail(self, new_value):
-      new_node = Node(new_value)
-      tail_node = self.get_tail_node()
-      tail_node.set_next_node(new_node)
-
-    def add_node_by_index(self, new_value, index):
-      current_node = self.get_head_node()
-      current_index = 0
-
-      if index is current_index:
-        add_node_to_head(new_value)
+    while currentNode:
+      if test(currentNode, currentIndex):
+        return currentNode
       else:
-        while current_node:
-          next_index = current_index + 1
-          next_node = current_node.get_next_node()
+        currentIndex = currentIndex + 1
+        currentNode = currentNode.getNextNode()
 
-          if next_node:
-            if index is next_index:
-              new_node = Node(new_value)
-              new_node.set_next_node(next_node)
-              current_node.set_next_node(new_node)
+  # Converts linked list values into a single output value
+  # 
+  # The reduce() method executes a reducer function (that you provide)
+  # on each node of the linked list, resulting in a single output value.
+  def __reduce(self, initialValue, reducer):
+    currentNode = self.getHeadNode()
+    currentIndex = 0
+    accumulator = initialValue
 
-          current_index = current_index + 1
-          current_node = next_node
+    while currentNode:
+      accumulator = reducer(accumulator, currentNode.getValue(), currentIndex)
+      currentIndex = currentIndex + 1
+      currentNode = currentNode.getNextNode()
 
-    def remove_head_node(self):
-      new_head = self.get_head_node().get_next_node()
-      self.head_node.set_next_node(None)
-      self.head_node = new_head
+    return accumulator
 
-    def remove_tail_node(self):
-      current_node = self.get_head_node()
+  # Get the head node.
+  def getHeadNode(self):
+    return self.__headNode
 
-      while current_node:
-        next_node = current_node.get_next_node()
+  # Set a new head node.
+  def setHeadNode(self, node):
+    self.__headNode = node
 
-        # If the next node is the last node
-        if next_node:
-          if next_node.get_next_node() is None:
-            current_node.set_next_node(None)
+  # Get the tail node.
+  def getTailNode(self):
+    return self.__find(lambda n, i: n.getNextNode() is None)
 
-        current_node = next_node
+  # Get node by stored value.
+  def getNodeByValue(self, value):
+    return self.__find(lambda n, i: n.getValue() is value)
 
-    def remove_node_by_value(self, value):
-      current_node = self.get_head_node()
+  # Get node by index in linked list.
+  def getNodeByIndex(self, index):
+    return self.__find(lambda n, i: i is index)
 
-      if current_node.get_value() is value:
-        remove_head_node()
-      else:
-        while current_node:
-          next_node = current_node.get_next_node()
+  # Add new node to the head of the linked list.
+  def addNodeToHead(self, value):
+    self.setHeadNode(Node(value, self.getHeadNode()))
 
-          if next_node:
-            if next_node.get_value() is value:
-              current_node.set_next_node(next_node.get_next_node())
+  # Add new node to the tail of the linked list.
+  def addNodeToTail(self, value):
+    self.getTailNode().setNextNode(Node(value))
 
-          current_node = next_node
+  # Add new node at specific index of linked list.
+  def addNodeByIndex(self, value, index):
+    if index is 0:
+      self.addNodeToHead(value)
+    else:
+      node = self.getNodeByIndex(index - 1)
+      node.setNextNode(Node(value, node.getNextNode()))
 
-    def remove_node_by_index(self, index):
-      current_node = self.get_head_node()
-      current_index = 0
+  # Remove head node.
+  def removeHeadNode(self):
+    newHead = self.getHeadNode().getNextNode()
+    self.getHeadNode().setNextNode(None)
+    self.setHeadNode(newHead)
 
-      if current_index is index:
-        remove_head_node()
-      else:
-        while current_node:
-          next_index = current_index + 1
-          next_node = current_node.get_next_node()
+  # Remove tail node.
+  #
+  # Gets the node before the tail node and removes the link to the tail node.
+  # The old tail node will be naturally cleaned up via garbage collection
+  def removeTailNode(self):
+    node = self.__find(lambda n, i: n.getNextNode().getNextNode() is None)
+    node.setNextNode(None)
 
-          if next_node is not None:
-            if next_index is index:
-              current_node.set_next_node(next_node.get_next_node())
+  # Remove node by value.
+  # 
+  # Gets the node before the matching node and removes the link to the matching node.
+  # The matching node will be naturally cleaned up via garbage collection
+  def removeNodeByValue(self, value):
+    if self.getHeadNode().getValue() is value:
+      self.removeHeadNode()
+    else:
+      node = self.__find(lambda n, i: n.getNextNode().getValue() is value)
 
-          current_index = current_index + 1
-          current_node = next_node
+      if node:
+        node.setNextNode(node.getNextNode().getNextNode())
 
-    def stringify_list(self):
-      current_node = self.get_head_node()
-      stringified_value = ''
+  # Remove node by index.
+  #
+  # Gets the node before the matching node and removes the link to the matching node.
+  # The matching node will be naturally cleaned up via garbage collection
+  def removeNodeByIndex(self, index):
+    if index is 0:
+      self.removeHeadNode()
+    else:
+      node = self.__find(lambda n, i: i is index - 1)
 
-      while current_node:
-        value = current_node.get_value()
-        next_node = current_node.get_next_node()
+      if node:
+        node.setNextNode(node.getNextNode().getNextNode())
 
-        if value is not None:
-          stringified_value += str(value)
+  # Appends a value to an array and then returns the array.
+  def appendAndReturn(self, arr, value):
+    arr.append(value)
+    return arr
 
-        if next_node:
-          if next_node.get_value() is not None:
-            stringified_value += ", "
-
-        current_node = next_node
-
-      return stringified_value
-
+  # Transform linked list values into a stringified list, comma separated.
+  def toString(self, separator = ", "):
+    return separator.join(self.__reduce([], lambda a, v, i: self.appendAndReturn(a, str(v))))
       
 # Tests
 
 # Create link list and add values
-ll = LinkedList(4)
-ll.add_node_to_tail(8)
-ll.add_node_to_tail(16)
-ll.add_node_to_tail(32)
-ll.add_node_to_tail(64)
-ll.add_node_to_tail(128)
+ll = LinkedList(Node(4))
+ll.addNodeToTail(8)
+ll.addNodeToTail(16)
+ll.addNodeToTail(32)
+ll.addNodeToTail(64)
+ll.addNodeToTail(128)
+
+# Should return 4, 8, 16, 32, 64, 128
+print(ll.toString()) 
 
 # Should remove 4
-ll.remove_head_node()
+ll.removeHeadNode()
+
+# Should return 8, 16, 32, 64, 128
+print(ll.toString())
 
 # Should remove 128
-ll.remove_tail_node()
+ll.removeTailNode()
+
+# Should return 8, 16, 32, 64
+print(ll.toString())
 
 # Should return 16
-print(ll.get_node_by_index(1).get_value())
+print(ll.getNodeByIndex(1).getValue())
 
-# Should remove 16
-ll.remove_node_by_index(1)
+# # Should remove 16
+ll.removeNodeByIndex(1)
+
+# Should return 8, 32, 64
+print(ll.toString())
 
 # Should add 24 at index 1
-ll.add_node_by_index(24, 1)
+ll.addNodeByIndex(24, 1)
 
-# Should return 32
-print(ll.get_node_by_value(32).get_value())
+# Should return 8, 24, 32, 64
+print(ll.toString())
 
-# Should remove 32 from the linked list
-ll.remove_node_by_value(32)
+# # Should return 32
+print(ll.getNodeByValue(32).getValue())
 
-# Should return 8, 24, 64
-print(ll.stringify_list())
+# # Should remove 32 from the linked list
+ll.removeNodeByValue(32)
+
+# # Should return 8, 24, 64
+print(ll.toString())

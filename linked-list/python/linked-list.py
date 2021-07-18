@@ -1,5 +1,3 @@
-import sys
-
 # Represents a node in the linked list.
 class Node:
   # The data held by the node.

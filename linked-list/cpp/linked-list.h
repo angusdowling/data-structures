@@ -213,14 +213,13 @@ class LinkedList {
      */
     inline
     std::string toString(std::string separator = ", ") {
-      std::function<std::vector<T> (std::vector<T>, T, int)> reducer = [](std::vector<T> accumulator, T value, int i) { 
-        accumulator.push_back(value);
-        return accumulator;
+      std::function<void (std::vector<T>*, T, int)> reducer = [](std::vector<T> *accumulator, T value, int i) { 
+        accumulator->push_back(value);
       };
 
-      std::vector<T> initialValue;
-      std::vector<T> reducedValue = this->reduce(reducer, initialValue);
-      return this->join(reducedValue, separator);
+      std::vector<T> accumulator;
+      this->reduce(reducer, &accumulator);
+      return this->join(&accumulator, separator);
     }
 
   private:
@@ -238,10 +237,10 @@ class LinkedList {
      * @returns String of combined values.
      */
     inline
-    std::string join(std::vector<T> value, std::string separator = ", ") {
+    std::string join(const std::vector<T> *value, const std::string separator = ", ") {
       std::string accumulator;
       
-      for (const T &piece : value) {
+      for (const T &piece : *value) {
         accumulator = !accumulator.empty() 
           ? accumulator + separator + std::to_string(piece) 
           : accumulator + std::to_string(piece);
@@ -262,7 +261,7 @@ class LinkedList {
      * @returns Node that matches the testing function.
      */
     inline
-    Node<T> *find(std::function<bool (Node<T>*, int)> test) {
+    Node<T> *find(const std::function<bool (Node<T>*, int)> test) {
       Node<T> *currentNode = this->getHeadNode();
       int currentIndex = 0;
 
@@ -279,7 +278,7 @@ class LinkedList {
     } 
 
     /**
-     * Converts linked list values into a single output value
+     * Aggregates linked list values into a single output value
      * 
      * The reduce() method executes a reducer function (that you provide)
      * on each node of the linked list, resulting in a single output value.
@@ -288,20 +287,17 @@ class LinkedList {
      * @returns Single output defined by reducer function.
      */
     inline
-    std::vector<T> reduce(
-      std::function<std::vector<T> (std::vector<T>, T, int)> reducer,
-      std::vector<T> initialValue
+    void reduce(
+      std::function<void (std::vector<T>*, T, int)> reducer,
+      std::vector<T> *accumulator
     ) {
       int currentIndex = 0;
       Node<T> *currentNode = this->getHeadNode();
-      std::vector<T> accumulator = initialValue;
 
       while (currentNode) {
-        accumulator = reducer(accumulator, currentNode->getValue(), currentIndex);
+        reducer(accumulator, currentNode->getValue(), currentIndex);
         currentIndex = currentIndex + 1;
         currentNode = currentNode->getNextNode();
       }
-
-      return accumulator;
     }
 };

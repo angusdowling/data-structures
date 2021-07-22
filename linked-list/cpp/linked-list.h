@@ -1,11 +1,6 @@
 #include <string>
 #include <vector>
-
-#include <array>
-#include <algorithm>
 #include <functional>
-#include <iostream>
-
 #include "node.h" 
 
 /**

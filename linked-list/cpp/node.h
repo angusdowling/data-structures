@@ -4,33 +4,50 @@
 template <class T>
 class Node {
   public:
-    Node(int value);
+    Node(T value, Node<T> *nextNode = nullptr) {
+      this->value = value;
+      this->nextNode = nextNode;
+    }
 
     /**
      * Get the node value.
      * @returns The node value.
      */
-    // T getValue();
+    T getValue() {
+      return this->value;
+    }
 
-    // /**
-    //  * Get the next node.
-    //  * @returns The next node.
-    //  */
-    // Node<T> *getNextNode();
+    /**
+     * Get the node value.
+     * @returns The node value.
+     */
+    void setValue(T value) {
+      this->value = value;
+    }
 
-    // /**
-    //  * Set the next node.
-    //  */
-    // Node<T> *setNextNode();
+    /**
+     * Get the next node.
+     * @returns The next node.
+     */
+    Node<T> *getNextNode() {
+      return this->nextNode;
+    }
+
+    /**
+     * Set the next node.
+     */
+    void setNextNode(Node<T> *node) {
+      this->nextNode = node;
+    };
 
   private:
     /**
      * The data held by the node.
      */
-    int value;
+    T value;
 
     /**
      * The next node in the linked list.
      */
-    // Node<T> *nextNode;
+    Node<T> *nextNode;
 };

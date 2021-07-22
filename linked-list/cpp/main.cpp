@@ -1,56 +1,70 @@
 #include <iostream>
-#include "node.h"
+#include "linked-list.h"
 
 int main() {
-  Node<int> headNode(4);
+  LinkedList<int> linkedList(128);
 
-  // std::cout << headNode.getValue() << "\n";
+  std::cout << "Adding 64 to head..." << std::endl;
+  linkedList.addNodeToHead(64);
+  std::cout << "Adding 32 to head..." << std::endl;
+  linkedList.addNodeToHead(32);
+  std::cout << "Adding 16 to head..." << std::endl;
+  linkedList.addNodeToHead(16);
+  std::cout << "Adding 8 to head..." << std::endl;
+  linkedList.addNodeToHead(8);
+  std::cout << "Adding 4 to head..." << std::endl;
+  linkedList.addNodeToHead(4);
 
+  std::cout << "Adding 256 to tail..." << std::endl;
+  linkedList.addNodeToTail(256);
+  std::cout << "Adding 512 to tail..." << std::endl;
+  linkedList.addNodeToTail(512);
+  std::cout << "Adding 1024 to tail..." << std::endl;
+  linkedList.addNodeToTail(1024);
+  std::cout << "Adding 2048 to tail..." << std::endl;
+  linkedList.addNodeToTail(2048);
+  std::cout << "Adding 4096 to tail..." << std::endl;
+  linkedList.addNodeToTail(4096);
 
-  // LinkedList<int> linkedList(&headNode);
+  std::cout << "Adding 1337 to index (2)..." << std::endl;
+  linkedList.addNodeByIndex(1337, 2);
+  std::cout << "-------" << std::endl;
+  // Should return 4
+  std::cout << "Head node: " << linkedList.getHeadNode()->getValue() << std::endl;
+  // Should return 4096
+  std::cout << "Tail node: " << linkedList.getTailNode()->getValue() << std::endl;
+  // Should return 64
+  std::cout << "Node by value (64): " << linkedList.getNodeByValue(64)->getValue() << std::endl;
+  // Should return 1337
+  std::cout << "Node by index (2): " << linkedList.getNodeByIndex(2)->getValue() << std::endl;
+  std::cout << "-------" << std::endl;
+  std::cout << "Removing head node..." << std::endl;
+  linkedList.removeHeadNode();
+  
+  // Should return 8
+  std::cout << "Head node: " << linkedList.getHeadNode()->getValue() << std::endl;
+  std::cout << "-------" << std::endl;
+  std::cout << "Removing tail node..." << std::endl;
+  linkedList.removeTailNode();
 
-  // linkedList.addNodeToTail(8);
-  // linkedList.addNodeToTail(16);
-  // linkedList.addNodeToTail(32);
-  // linkedList.addNodeToTail(64);
-  // linkedList.addNodeToTail(128);
+  // Should return 2048
+  std::cout << "Tail node: " << linkedList.getTailNode()->getValue() << std::endl;
+  std::cout << "-------" << std::endl;
+  std::cout << "Removing node by value (256)..." << std::endl;
+  linkedList.removeNodeByValue(256);
 
-  // // Should return 4, 8, 16, 32, 64, 128
-  // std::cout << linkedList.toString() << "\n";
+  // Expect getting a node by value 256 to return 0
+  std::cout << "Node by value (256): " << linkedList.getNodeByValue(256) << std::endl;
+  std::cout << "-------" << std::endl;
+  // Should return 16
+  std::cout << "Node by index (2): " << linkedList.getNodeByIndex(2)->getValue() << std::endl;
 
-  // // Should remove 4
-  // linkedList.removeHeadNode();
+  std::cout << "Removing node by index (2)..." << std::endl;
+  linkedList.removeNodeByIndex(2);
 
-  // // Should return 8, 16, 32, 64, 128
-  // std::cout << linkedList.toString() << "\n";
+  // Should return 32
+  std::cout << "Node by index (2): " << linkedList.getNodeByIndex(2)->getValue() << std::endl;
 
-  // // Should remove 128
-  // linkedList.removeTailNode();
-
-  // // Should return 8, 16, 32, 64
-  // std::cout << linkedList.toString() << "\n";
-
-  // // Should return 16
-  // std::cout << linkedList.getNodeByIndex(1).getValue() << "\n";
-
-  // // Should remove 16
-  // linkedList.removeNodeByIndex(1);
-
-  // // Should return 8, 32, 64
-  // std::cout << linkedList.toString() << "\n";
-
-  // // Should add 24 at index 1
-  // linkedList.addNodeByIndex(24, 1);
-
-  // // Should return 8, 24, 32, 64
-  // std::cout << linkedList.toString() << "\n";
-
-  // // Should return 32
-  // std::cout << linkedList.getNodeByValue(32).getValue() << "\n";
-
-  // // Should remove 32 from the linked list
-  // linkedList.removeNodeByValue(32);
-
-  // // Should return 8, 24, 64
-  // std::cout << linkedList.toString() << "\n";
+  // Should return 8, 1337, 32, 64, 128, 512, 1024, 2048
+  std::cout << linkedList.toString() << std::endl;
 }

@@ -4,11 +4,16 @@
 #include "node.h" 
 
 /**
- * Represents a node in the linked list.
+ * Represents a linked list.
  */
 template <class T>
 class LinkedList {
   public:
+    /**
+     * Default constructor
+     */
+    LinkedList() : headNode(nullptr) {};
+
     /**
      * Creates a linked list.
      * @param node Node to be set as the first node in the linked list.

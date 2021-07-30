@@ -2,7 +2,7 @@
 #include "linked-list.h"
 
 int main() {
-  LinkedList<int> linkedList(128);
+  LinkedList<int> linkedList;
 
   std::cout << "Adding 64 to head..." << std::endl;
   linkedList.addNodeToHead(64);

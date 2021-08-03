@@ -14,15 +14,7 @@ class Queue {
      */
     inline
     Queue(int limit = 1000) {
-      this->nodes = nullptr;
       this->limit = limit;
-    }
-
-    /**
-     * Destructor cleanup, deallocates heap memory allocated by this class when it goes out of scope.
-     */
-    inline
-    ~Queue() {
     }
 
     /**
@@ -30,12 +22,10 @@ class Queue {
      */
     inline
     bool isEmpty() {
-      if (this->nodes->size() == 0) {
+      if (this->nodes.size() == 0) {
         std::cout << "The Queue is empty." << std::endl;
-      } else {
-        std::cout << "Not" << std::endl;
-      }
-      return this->nodes->size() == 0;
+      } 
+      return this->nodes.size() == 0;
     }
 
     /**
@@ -43,54 +33,50 @@ class Queue {
      */
     inline
     bool isFull() {
-      if (this->nodes->size() == this->limit) {
+      if (this->nodes.size() == this->limit) {
         std::cout << "The Queue is full." << std::endl;
       }
-      return this->nodes->size() == this->limit;
+      return this->nodes.size() == this->limit;
     }
 
     /**
-     * Adds a new headNode to the Queue.
+     * Adds a new node to the Queue.
      * @param value The value of the new node.
      */
     inline
     void queue(T value) {
       if (!this->isFull()) {
-        this->nodes->push_back(value);
-        std::cout << "A node with the value " << this->nodes->back() << " has been added to the Queue." << std::endl;
+        this->nodes.push_back(value);
+        std::cout << "A node with the value " << this->nodes.back() << " has been added to the Queue." << std::endl;
       }
     }
 
     /**
-     * Removes the headNode from the Queue and returns its value.
-     * @returns The headNode value.
+     * Removes the first node from the Queue and returns its value.
+     * @returns The first node value.
      */
-    // inline
-    // std::optional<T> pop() {
-    //   std::optional<T> returnValue;
+    inline
+    std::optional<T> dequeue() {
+      std::optional<T> returnValue;
 
-    //   if (!this->isEmpty()) {
-    //     returnValue = this->headNode->value;
-    //     Node<T> *nextNode = this->headNode->nextNode;
-    //     delete this->headNode;
-    //     this->headNode = nextNode;
-    //     this->nodes->size() = this->nodes->size() - 1;
-    //   }
+      if (!this->isEmpty()) {
+        returnValue = this->nodes.front();
+        this->nodes.erase(this->nodes.begin());
+      }
       
-    //   return returnValue;
-    // }
+      return returnValue;
+    }
 
     /**
-     * Returns the headNode value.
-     * @returns The headNode value.
+     * Returns the first node value.
+     * @returns The first node value.
      */
     inline
     std::optional<T> peek() {
       std::optional<T> returnValue;
 
       if (!this->isEmpty()) {
-        // returnValue = this->nodes[0];
-        returnValue = 3;
+        returnValue = this->nodes.front();
       }
 
       return returnValue;
@@ -100,7 +86,7 @@ class Queue {
     /**
      * Queue nodes.
      */
-    std::vector<T> *nodes;
+    std::vector<T> nodes;
 
     /**
      * Maximum limit of nodes allowed in Queue.

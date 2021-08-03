@@ -7,9 +7,9 @@ int main() {
   std::optional<int> currentValue;
   // Should output "The stack is empty."
   currentValue = stack.peek();
-  if (currentValue.has_value()) {
+  // if (currentValue.has_value()) {
     std::cout << "peeking the top value: " << currentValue.value() << std::endl;
-  }
+  // }
   
   // Should output "The stack is empty."
   currentValue = stack.pop();
